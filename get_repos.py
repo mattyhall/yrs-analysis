@@ -36,6 +36,10 @@ def get_languages(url, auth):
     r = requests.get(url, auth=auth)
     return r.json()
 
+def get_contibutors(url, auth):
+    r = requests.get(url, auth=auth)
+    return (len(r.json()))
+
 def get_repo_information(db):
     password = getpass.getpass()
     base_url = 'https://api.github.com/'
@@ -55,7 +59,9 @@ def get_repo_information(db):
         if json.get('message', '') != 'Not Found':
             project_data.update(json)
             languages = get_languages(project_data['languages_url'], auth)
+            contributors = get_contibutors(project_data['contributors_url'], auth)
             project_data['languages'] = languages
+            project_data['contributors'] = contributors
             projects.append(project_data)
     projects_data_tbl.insert(projects)
 
